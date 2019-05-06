@@ -33,7 +33,7 @@ windows := 0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00
 # Assumes PDBs are named in this convention:
 WT_struct = $(addsuffix .pdb, $(TCR)) # e.g. 3qdj.pdb
 MUT_struct = $(addsuffix .pdb, $(TM)) # e.g. 3qdj-bF100Y.pdb
-MHC_struct = $(addsuffix .pdb, $(P)) # e.g. MART1.pdb
+MHC_struct = $(addsuffix .pdb, $(pMHC)) # e.g. MART1.pdb
 ##
 P = $(addprefix _, $(pMHC))
 M = $(addprefix -, $(MUT))
