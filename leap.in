@@ -1,15 +1,24 @@
 source /opt/crc/Modules/current/init/sh
-WT=$1
+TCR=$1
 MUT=$2
-type=$3
-bondlist=$(python <<EOF
+MHC=$3
+MUTname=$(echo $MUT | cut -d '.' -f 1 | cut -d '-' -f 2)
+TCRbondlist=$(python <<EOF
 ss = [b.split(':') for b in "$4".split()]
 for pair in ss:
         print "bond %cond%.{}.SG %cond%.{}.SG".format(*pair)
 EOF
 )
-Na=$5
-Cl=$6
+MHCbondlist=$(python <<EOF
+ss = [b.split(':') for b in "$5".split()]
+for pair in ss:
+        print "bond %cond%.{}.SG %cond%.{}.SG".format(*pair)
+EOF
+)
+Na1=$6
+Cl1=$7
+Na2=$8
+Cl2=$9
 
 module load amber/18.0
 tleap -f - <<_EOF
@@ -17,18 +26,28 @@ source leaprc.protein.ff14SB
 source leaprc.water.spce
 loadoff MAA.lib
 
-WT = loadpdb $WT
-$(echo "$bondlist" | sed "s/%cond%/wt/g")
-savepdb wt PDBfiles/init_WT-$type.pdb
+TCR = loadpdb $TCR
+$(echo "$TCRbondlist" | sed "s/%cond%/TCR/g")
+savepdb TCR PDBfiles/init_WT-protein.pdb
 
 mut = loadpdb $MUT
-$(echo "$bondlist" | sed "s/%cond%/mut/g" )
-savepdb mut PDBfiles/init_$MUTname-$type.pdb
+$(echo "$TCRbondlist" | sed "s/%cond%/mut/g" )
+savepdb mut PDBfiles/init_$MUTname-protein.pdb
 
-combo = combine {WT mut}
-solvatebox combo SPCBOX 10.0 iso
-addIonsRand combo Na+ $Na Cl- $Cl
-savepdb combo PDBfiles/combo-WT_mut.pdb
-saveAmberParm combo PRMTOPwat_$type.prmtop INPCRDwat_$type.inpcrd
+MHC = loadpdb $MHC
+$(echo "$MHCbondlist" | sed "s/%cond%/MHC/g" )
+savepdb MHC PDBfiles/init_MHC.pdb
+
+combo_protein = combine {TCR mut}
+savepdb combo_protein PDBfiles/combo-TCR.pdb
+solvatebox combo_protein SPCBOX 10.0 iso
+addIonsRand combo_protein Na+ $Na1 Cl- $Cl1
+saveAmberParm combo_protein PRMTOPwat_protein.prmtop INPCRDwat_protein.inpcrd
+
+combo_complex = combine {TCR mut MHC}
+savepdb combo_complex PDBfiles/combo-TCR_pMHC.pdb
+solvatebox combo_complex SPCBOX 10.0 iso
+addIonsRand combo_complex Na+ $Na2 Cl- $Cl2
+saveAmberParm combo_complex PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd
 quit
 _EOF

@@ -6,18 +6,18 @@ MUT :=  XXX
 # e.g. bF100Y
 MUT_3 = XXX
 # e.g. TYR
-ions := X X
+p_ions := X X
+c_ions := X X
 # Number of Na+ and Cl- ions to add to desired molarity (e.g. 150mM)
 fast := True
 # if fast = True, set dt to 0.004 and HMassReparition PRMTOP ; else, dt = 0.01
-proteinSSBondList = XX:XX XXX:XX XXX:XXX
+TCRSSBondList = XX:XX XXX:XXX XXX:XXX XXX:XXX XXX:XXX
+MHCSSBondList = XXX:XXX XXX:XXX XXX:XXX
 # e.g. 22:88 132:182 157:368 222:290 342:407 in tleap format
-complexSSBondList = XX:XX XXX:XX XXX:XXX
-# e.g. 101:164 203:259 301:356 406:472 516:566 541:752 606:674 726:791 in tleap format
 proteinJOBnames := ___
-# e.g. DMF5F100Yp
+# e.g. DMF5bF100Yp
 complexJOBnames := ___
-# e.g. DMF5F100Yc
+# e.g. DMF5bF100Yc
 ############## Probably don't change variables below this line. #########################
 fileList := MAA.cmd leap.in merge.in min_job.sh equalize_volume.sh
 PDBdir := PDBfiles
@@ -31,17 +31,14 @@ jobTemplates := $(addprefix $(jobInpDir)/, $(addsuffix .job, prep prod))
 tempDirs := $(MDinpDir) $(jobInpDir)
 windows := 0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00
 # Assumes PDBs are named in this convention:
-WT_protein = $(addsuffix .pdb, $(TCR)) # e.g. 3qdj.pdb
-WT_complex = $(addsuffix .pdb, $(TP)) # e.g. 3qdj_MART1.pdb
-MUT_protein = $(addsuffix .pdb, $(TM)) # e.g. 3qdj-bF100Y.pdb
-MUT_complex = $(addsuffix .pdb, $(TPM)) # e.g. 3qdj-bF100Y_MART1.pdb
+WT_struct = $(addsuffix .pdb, $(TCR)) # e.g. 3qdj.pdb
+MUT_struct = $(addsuffix .pdb, $(TM)) # e.g. 3qdj-bF100Y.pdb
+MHC_struct = $(addsuffix .pdb, $(P)) # e.g. MART1.pdb
 ##
 P = $(addprefix _, $(pMHC))
 M = $(addprefix -, $(MUT))
-PM = $(addprefix $(P), $(M))
-TP = $(addprefix $(TCR), $(P))
 TM = $(addprefix $(TCR), $(M))
-TPM = $(addprefix $(TP), $(M))
+
 ifeq ($(fast),True)
 	HM = "HMassReparition"
 	dt = 0.004
