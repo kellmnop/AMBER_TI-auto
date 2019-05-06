@@ -5,9 +5,9 @@ DNA: 20ps NVT MD with temp ramp and restraints on solute
   ntt = 3, gamma_ln = 1.0,
   tempi = 0.0, temp0 = 300.0, nmropt = 1,
   cut = 8,
-  ntc = 2, ntf = 2,
+  ntc = 2, ntf = 1,
   ntr = 1,
-  nstlim = 20000, dt = 0.002,
+  nstlim = 10000, dt = %DT%,
   ntpr = 1000, ntwx = 1000, ntwr = 10000,
   restraint_wt=25.0,
   restraintmask=!(:WAT,Na+,Cl-),
@@ -23,10 +23,6 @@ DNA: 20ps NVT MD with temp ramp and restraints on solute
  &wt 
    type='TEMP0', istep1=0,     istep2=10000,
                  value1=0.0,  value2=300.0,
- /
- &wt 
-   type='TEMP0', istep1=5000,   istep2=20000,
-                 value1=300.0, value2=300.0,
  /
  &wt 
    type='END',
