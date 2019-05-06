@@ -1,0 +1,34 @@
+DNA: 20ps NVT MD with temp ramp and restraints on solute
+ &cntrl
+  imin = 0, irest = 0, ntx = 1,
+  ntb = 1,
+  ntt = 3, gamma_ln = 1.0,
+  tempi = 0.0, temp0 = 300.0, nmropt = 1,
+  cut = 8,
+  ntc = 2, ntf = 2,
+  ntr = 1,
+  nstlim = 20000, dt = 0.002,
+  ntpr = 1000, ntwx = 1000, ntwr = 10000,
+  restraint_wt=25.0,
+  restraintmask=!(:WAT,Na+,Cl-),
+  ntwprt = %R%,
+  icfe = 1, ifsc = 1, clambda = %L%,
+  timask1=%TS1%,
+  timask2=%TS2%,
+  scmask1=%TS1%,
+  scmask2=%TS2%,
+  ifmbar = 1, mbar_states = ,
+  mbar_lambda = ,
+/
+ &wt 
+   type='TEMP0', istep1=0,     istep2=10000,
+                 value1=0.0,  value2=300.0,
+ /
+ &wt 
+   type='TEMP0', istep1=5000,   istep2=20000,
+                 value1=300.0, value2=300.0,
+ /
+ &wt 
+   type='END',
+ /
+END

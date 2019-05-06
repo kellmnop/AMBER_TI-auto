@@ -1,0 +1,24 @@
+DNA: 100ps NPT MD gradually releasing restraints on solute
+ &cntrl
+  imin = 0, irest = 1, ntx = 7,
+  ntb = 2, 
+  ntt = 3, gamma_ln = 1.0,
+  tempi = 300.0, temp0  = 300.0,
+  pres0 = 1.0, ntp = 1, taup = 2.0,
+  cut = 8,
+  ntc = 2, ntf = 2,
+  ntr = 1,
+  nstlim = 20000, dt = 0.002,
+  ntpr = 1000, ntwx = 1000, ntwr = 10000,
+  restraint_wt = 5.0,
+  restraintmask = !(:WAT,Na+,Cl-),
+  ntwprt = %R%,
+  icfe = 1, ifsc = 1, clambda = %L%,
+  timask1=%TS1%,
+  timask2=%TS2%,
+  scmask1=%TS1%,
+  scmask2=%TS2%,
+  ifmbar = 1, mbar_states = ,
+  mbar_lambda = ,
+ /
+END

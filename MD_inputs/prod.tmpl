@@ -1,0 +1,36 @@
+NVT dt=1.0fs with SHAKE, production at 300K for with Berendsen thermostat (20ns chunk)
+&cntrl
+  imin   = 0,           !no mininisation
+  irest  = 1,           !restart
+  ntx    = 5,           !coordinates and velocities are read in
+  dt = 0.002,           !2 fs time step
+  ntc    = 2,           !SHAKE; bonds involving H are constrainted
+  ntf    = 2,           !all H-atom bonds forces are not evaluated
+  tol    = 0.000001,    !Shake tolerance 10 times tighter than default
+  ntb    = 1,           !periodicity and PME on!
+  cut    = 8,           !8A cut off
+  igb    = 0,           !Not Generalized Borne
+  ntt    = 3,           !Berendsen thermostat (weak coupling)
+  gamma_ln = 1.0,       !Collision frequency set to 1ps
+  temp0  = 300.0,       !Target temp = 300K
+  tautp  = 10.0,        !constant for heat bath coupling
+  ntpr   = 100000,      !print details to log every 100ps (100,000 steps)
+  ntwx   = 1000000,     !write coordinates to mdcrd every ns (1,000,000 steps)
+  ntwr   = 1000000,     !write restart file every 1ns (1,000,000 steps)
+  ntwe	 = 5,		!print energy to .en file every 10 fs (5 step)
+  nstlim = 10000000,    !run for 10,000,000 steps (20ns)
+  nscm   = 0,           !Remove COM motion every 0 steps
+  ioutfm = 1,           !NetCDF MDCRD.
+  iwrap  = 1,           !Wrap
+  ntwprt = %R%,         !Only write MDCRD coords for first %R% atoms. 35910 for protein, 161077 for complex
+  icfe = 1, ifsc = 1, clambda = %L%,
+  timask1=%TS1%,
+  timask2=%TS2%,
+  scmask1=%TS1%,
+  scmask2=%TS2%,
+  ifmbar = 1, mbar_states = ,
+  mbar_lambda = ,
+/
+ &ewald
+   dsum_tol=0.000001,
+ /

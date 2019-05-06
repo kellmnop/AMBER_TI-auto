@@ -1,0 +1,26 @@
+source /opt/crc/Modules/current/init/sh
+type=$1
+MUT=$2
+num_res=$(head -8 PRMTOPnowat_$type.prmtop | tail -1 | tr -s ' ' | cut -d ' ' -f 3)
+single_prot=$(( $num_res / 2 ))
+ch1=$(grep "MAA" $MUT | head -1 | tr -s ' ' | cut -d ' ' -f 9)
+ch2=$(grep "MAA" $MUT | head -1 | tr -s ' ' | cut -d ' ' -f 7)
+pos=$(grep "$ch1" PDBfiles/init_WT-$type.pdb | grep "$ch2" | tr -s ' ' | cut -d ' ' -f 5)
+echo $pos
+qsub <<_EOF
+#!/bin/bash
+#$ -N prep_$3
+#$ -M gkeller1.edu
+#$ -m ae
+#$ -q long
+
+source /opt/crc/Modules/current/init/sh
+module load python/2.7.14
+python ~/.local/bin/parmed -p PRMTOPwat_$type.prmtop <<EOF > merge_$type.out
+loadRestrt INPCRDwat_$type.inpcrd
+setOverwrite True
+tiMerge :1-$single_prot :$(( $single_prot + 1))-$num_res :$pos :$(( $single_prot + $pos ))
+outparm PRMTOPwat_$type-merged.prmtop INPCRDwat_$type-merged.inpcrd
+quit
+EOF
+_EOF
