@@ -24,7 +24,7 @@ leap_prep : PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd PRMTOPwat_protein.
 MAA.lib : MAA.cmd
 	sh $< $(MUT_3)
 .PHONY complex_structs : 
-PRMTOP*.prmtop INPCRD*.inpcrd : leap.in MAA.lib | $(PDBdir)
+PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd PRMTOPwat_protein.prmtop INPCRDwat_protein.inpcrd : leap.in MAA.lib | $(PDBdir)
 	@sh $< $(WT_struct) $(MUT_struct) $(MHC_struct) "$(TCRSSBondList)" "$(MHCSSBondList)" $(p_ions) $(c_ions)
 
 ###################################################

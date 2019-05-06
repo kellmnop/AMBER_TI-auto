@@ -43,11 +43,13 @@ savepdb combo_protein PDBfiles/combo-TCR.pdb
 solvatebox combo_protein SPCBOX 10.0 iso
 addIonsRand combo_protein Na+ $Na1 Cl- $Cl1
 saveAmberParm combo_protein PRMTOPwat_protein.prmtop INPCRDwat_protein.inpcrd
+savepdb combo_protein PDBfiles/protein_hydrated.pdb
 
 combo_complex = combine {TCR mut MHC}
 savepdb combo_complex PDBfiles/combo-TCR_pMHC.pdb
 solvatebox combo_complex SPCBOX 10.0 iso
 addIonsRand combo_complex Na+ $Na2 Cl- $Cl2
 saveAmberParm combo_complex PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd
+savepdb complex PDBfiles/complex_hydrated.pdb
 quit
 _EOF
