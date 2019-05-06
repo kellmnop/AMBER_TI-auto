@@ -6,6 +6,10 @@ MUT :=  XXX
 # e.g. bF100Y
 MUT_3 = XXX
 # e.g. TYR
+ions := X X
+# Number of Na+ and Cl- ions to add to desired molarity (e.g. 150mM)
+fast := True
+# if fast = True, set dt to 0.004 and HMassReparition PRMTOP ; else, dt = 0.01
 proteinSSBondList = XX:XX XXX:XX XXX:XXX
 # e.g. 22:88 132:182 157:368 222:290 342:407 in tleap format
 complexSSBondList = XX:XX XXX:XX XXX:XXX
@@ -25,12 +29,12 @@ CONDdirs := $(addprefix $(RUNdir)/, protein complex)
 mdTemplates := $(addprefix $(MDinpDir)/, $(addsuffix .tmpl, $(mdNames)))
 jobTemplates := $(addprefix $(jobInpDir)/, $(addsuffix .job, prep prod))
 tempDirs := $(MDinpDir) $(jobInpDir)
-windows := 0.00000 0.02544 0.12923 0.29707 0.50000 0.70292 0.87076 0.97455 1.00000
+windows := 0.00 0.10 0.20 0.30 0.40 0.50 0.60 0.70 0.80 0.90 1.00
 # Assumes PDBs are named in this convention:
-WT_protein = $(addsuffix .pdb, $(TCR)) # e.g. HCV1406.pdb
-WT_complex = $(addsuffix .pdb, $(TP)) # e.g. HCV1406_NS3.pdb
+WT_protein = $(addsuffix .pdb, $(TCR)) # e.g. 3qdj.pdb
+WT_complex = $(addsuffix .pdb, $(TP)) # e.g. 3qdj_MART1.pdb
 MUT_protein = $(addsuffix .pdb, $(TM)) # e.g. 3qdj-bF100Y.pdb
-MUT_complex = $(addsuffix .pdb, $(TPM)) # e.g. 3qdj_AAG-bF100Y.pdb
+MUT_complex = $(addsuffix .pdb, $(TPM)) # e.g. 3qdj-bF100Y_MART1.pdb
 ##
 P = $(addprefix _, $(pMHC))
 M = $(addprefix -, $(MUT))
@@ -38,3 +42,10 @@ PM = $(addprefix $(P), $(M))
 TP = $(addprefix $(TCR), $(P))
 TM = $(addprefix $(TCR), $(M))
 TPM = $(addprefix $(TP), $(M))
+ifeq ($(fast),True)
+	HM = "HMassReparition"
+	dt = 0.004
+else
+	HM = ""
+	dt = 0.001
+endif

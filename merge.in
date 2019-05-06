@@ -1,6 +1,7 @@
 source /opt/crc/Modules/current/init/sh
 type=$1
 MUT=$2
+HM=$3
 num_res=$(head -8 PRMTOPnowat_$type.prmtop | tail -1 | tr -s ' ' | cut -d ' ' -f 3)
 single_prot=$(( $num_res / 2 ))
 ch1=$(grep "MAA" $MUT | head -1 | tr -s ' ' | cut -d ' ' -f 9)
@@ -15,11 +16,12 @@ qsub <<_EOF
 #$ -q long
 
 source /opt/crc/Modules/current/init/sh
-module load python/2.7.14
+module load python
 python ~/.local/bin/parmed -p PRMTOPwat_$type.prmtop <<EOF > merge_$type.out
 loadRestrt INPCRDwat_$type.inpcrd
 setOverwrite True
 tiMerge :1-$single_prot :$(( $single_prot + 1))-$num_res :$pos :$(( $single_prot + $pos ))
+$HM
 outparm PRMTOPwat_$type-merged.prmtop INPCRDwat_$type-merged.inpcrd
 quit
 EOF

@@ -1,7 +1,6 @@
 source /opt/crc/Modules/current/init/sh
 WT=$1
 MUT=$2
-MUTname=$(echo $MUT | cut -d '.' -f 1 | cut -d '-' -f 2)
 type=$3
 bondlist=$(python <<EOF
 ss = [b.split(':') for b in "$4".split()]
@@ -9,34 +8,16 @@ for pair in ss:
         print "bond %cond%.{}.SG %cond%.{}.SG".format(*pair)
 EOF
 )
+Na=$5
+Cl=$6
 
 module load amber/18.0
 tleap -f - <<_EOF
 source leaprc.protein.ff14SB
 source leaprc.water.spce
-
-in = loadpdb $WT
-solvatebox in SPCBOX 10.0 iso 0.8
-saveamberparm temp_$type.prmtop temp_$type.inpcrd
-quit
-_EOF
-
-cpptraj -p temp_$type.prmtop <<_EOF
-trajin temp_$type.inpcrd
-strip !:WAT,Na+
-trajout WAT_$type.pdb
-run
-quit
-_EOF
-
-
-tleap -f - <<_EOF
-source leaprc.protein.ff14SB
-source leaprc.water.spce
 loadoff MAA.lib
-set default nocenter on
 
-wt = loadpdb $WT
+WT = loadpdb $WT
 $(echo "$bondlist" | sed "s/%cond%/wt/g")
 savepdb wt PDBfiles/init_WT-$type.pdb
 
@@ -44,13 +25,10 @@ mut = loadpdb $MUT
 $(echo "$bondlist" | sed "s/%cond%/mut/g" )
 savepdb mut PDBfiles/init_$MUTname-$type.pdb
 
-combo_dry = combine {wt mut}
-savepdb combo PDBfiles/init_$type.pdb
-saveAmberParm combo_dry PRMTOPnowat_$type.prmtop INPCRDnowat_$type.inpcrd
-wat = loadpdb WAT_$type.pdb
-combo = combine {wt mut wat}
-addions combo Na+ 0
+combo = combine {WT mut}
+solvatebox combo SPCBOX 10.0 iso
+addIonsRand combo Na+ $Na Cl- $Cl
+savepdb combo PDBfiles/combo-WT_mut.pdb
 saveAmberParm combo PRMTOPwat_$type.prmtop INPCRDwat_$type.inpcrd
-
 quit
 _EOF

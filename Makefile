@@ -28,7 +28,7 @@ complex_structs : PRMTOPnowat_complex.prmtop PRMTOPwat_complex.prmtop INPCRDnowa
 protein_structs : PRMTOPnowat_protein.prmtop PRMTOPwat_protein.prmtop INPCRDnowat_protein.inpcrd INPCRDwat_protein.inpcrd
 
 PRMTOPnowat_%.prmtop PRMTOPwat_%.prmtop INPCRDnowat_%.inpcrd INPCRDwat_%.inpcrd : leap.in MAA.lib | $(PDBdir)
-	@sh $< $(WT_$*) $(MUT_$*) $* "$($*SSBondList)"
+	@sh $< $(WT_$*) $(MUT_$*) $* "$($*SSBondList)" $(ions)
 
 ###################################################
 ##
@@ -51,7 +51,7 @@ merge_protein.out : PRMTOPwat_protein-merged.prmtop INPCRDwat_protein-merged.inp
 merge_complex.out : PRMTOPwat_complex-merged.prmtop INPCRDwat_complex-merged.inpcrd
 
 PRMTOPwat_%-merged.prmtop INPCRDwat_%-merged.inpcrd : merge.in PRMTOPwat_%.prmtop INPCRDwat_%.inpcrd
-	@sh $< $* $(MUT_protein) $(MUT)	
+	@sh $< $* $(MUT_protein) $(MUT)	$(HM)
 ###################################################
 ##
 ## setup_min
@@ -70,7 +70,7 @@ setup_min : min_protein min_complex
 ## __ starts minimization jobs, and fills in variables specific to each lambda window for complex
 ##
 min_% : min_job.sh $(mdTemplates) equalize_volume.sh | %Wins
-	@sh $< $* $($*JOBnames) $(MDinpDir) $(jobInpDir)
+	@sh $< $* $($*JOBnames) $(MDinpDir) $(jobInpDir) "$(windows)" $(dt)
 ###################################################
 ##
 ## setup_prep
