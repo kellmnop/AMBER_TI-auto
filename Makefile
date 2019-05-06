@@ -9,7 +9,7 @@ help : Makefile
 ## __ creates all prmtop, inpcrd files for wild-type and mutant free protein and complexes, as well as their dependencies
 ##
 .PHONY : leap_prep
-leap_prep : complex_structs protein_structs
+leap_prep : PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd PRMTOPwat_protein.prmtop INPCRDwat_protein.inpcrd
 ## leap_prep recipes ::
 ##
 ## MAA.lib : MAA.cmd
@@ -23,7 +23,8 @@ leap_prep : complex_structs protein_structs
 ##
 MAA.lib : MAA.cmd
 	sh $< $(MUT_3)
-PRMTOPnowat_complex.prmtop PRMTOPwat_complex.prmtop INPCRDnowat_complex.inpcrd INPCRDwat_complex.inpcrd PRMTOPnowat_protein.prmtop PRMTOPwat_protein.prmtop INPCRDnowat_protein.inpcrd INPCRDwat_protein.inpcrd : leap.in MAA.lib | $(PDBdir)
+.PHONY complex_structs : 
+PRMTOP*.prmtop INPCRD*.inpcrd : leap.in MAA.lib | $(PDBdir)
 	@sh $< $(WT_struct) $(MUT_struct) $(MHC_struct) "$(TCRSSBondList)" "$(MHCSSBondList)" $(p_ions) $(c_ions)
 
 ###################################################
