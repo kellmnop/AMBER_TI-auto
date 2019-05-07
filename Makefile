@@ -150,8 +150,8 @@ instructions : Makefile
 
 .PHONY : clean
 clean :
-	@rm *.prmtop *.inpcrd *.out leap.log 
-	@rm -r $(RUNdir)/
+	@rm -r *.prmtop *.inpcrd *.out leap.log $(RUNdir)/
+
 #@
 #@
 #@ TO USE for AMBER Thermodynamic Integration::

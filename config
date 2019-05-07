@@ -40,7 +40,7 @@ M = $(addprefix -, $(MUT))
 TM = $(addprefix $(TCR), $(M))
 
 ifeq ($(fast),True)
-	HM = "HMassReparition"
+	HM = "HMassRepartition"
 	dt = 0.004
 else
 	HM = ""
