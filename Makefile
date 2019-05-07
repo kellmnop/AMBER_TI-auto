@@ -25,7 +25,8 @@ MAA.lib : MAA.cmd
 	sh $< $(MUT_3)
 .PHONY complex_structs : 
 PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd PRMTOPwat_protein.prmtop INPCRDwat_protein.inpcrd : leap.in MAA.lib | $(PDBdir)
-	@sh $< $(WT_struct) $(MUT_struct) $(MHC_struct) "$(TCRSSBondList)" "$(MHCSSBondList)" $(p_ions) $(c_ions)
+	@sh $< $(WT_struct) $(MUT_struct) $(MHC_struct) "$(TCRSSBondList)" "$(MHCSSBondList)" $(p_ions) $(c_ions) > leap.log
+	@grep -i error leap.log
 
 ###################################################
 ##

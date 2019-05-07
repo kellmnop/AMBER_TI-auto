@@ -18,7 +18,7 @@ module load python
 python ~/.local/bin/parmed -p PRMTOPwat_$type.prmtop <<EOF > merge_$type.out
 loadRestrt INPCRDwat_$type.inpcrd
 setOverwrite True
-tiMerge :1-$single_prot :$(( $single_prot + 1))-$num_res :$pos :$(( $single_prot + $pos ))
+tiMerge :1-$num_res :$(( $num_res + 1))-$(( 2 * $num_res )) :$mut_pos :$(( $mut_pos + $num_res ))
 $HM
 outparm PRMTOPwat_$type-merged.prmtop INPCRDwat_$type-merged.inpcrd
 quit
