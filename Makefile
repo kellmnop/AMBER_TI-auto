@@ -49,7 +49,7 @@ merge_protein.out : PRMTOPwat_protein-merged.prmtop INPCRDwat_protein-merged.inp
 merge_complex.out : PRMTOPwat_complex-merged.prmtop INPCRDwat_complex-merged.inpcrd
 
 PRMTOPwat_%-merged.prmtop INPCRDwat_%-merged.inpcrd : merge.in PRMTOPwat_%.prmtop INPCRDwat_%.inpcrd
-	@sh $< $* $(MUT_protein) $(MUT)	$(HM)
+	@sh $< $* $(MUT) $(HM)
 ###################################################
 ##
 ## setup_min
