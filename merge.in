@@ -1,7 +1,7 @@
 source /opt/crc/Modules/current/init/sh
 type=$1
 MUT=$2
-HM=$3
+HM=$4
 mut_pos=$(grep "MAA" PDBfiles/init_"$MUT"-protein.pdb | head -n 1 | awk '{print $5}')
 num_res=$(tail -n 3 PDBfiles/init_WT-protein.pdb | head -n 1 | awk '{print $5}')
 echo $mut_pos

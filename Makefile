@@ -22,10 +22,10 @@ leap_prep : PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd PRMTOPwat_protein.
 ## __ makes paramter/topology and coord files for free protein
 ##
 MAA.lib : MAA.cmd
-	sh $< $(MUT_3)
+	@sh $< $(MUT_3) >> leap.log
 .PHONY complex_structs : 
 PRMTOPwat_complex.prmtop INPCRDwat_complex.inpcrd PRMTOPwat_protein.prmtop INPCRDwat_protein.inpcrd : leap.in MAA.lib | $(PDBdir)
-	@sh $< $(WT_struct) $(MUT_struct) $(MHC_struct) "$(TCRSSBondList)" "$(MHCSSBondList)" $(p_ions) $(c_ions) > leap.log
+	@sh $< $(WT_struct) $(MUT_struct) $(MHC_struct) "$(TCRSSBondList)" "$(MHCSSBondList)" $(p_ions) $(c_ions) >> leap.log
 	@grep -i error leap.log
 
 ###################################################
@@ -148,6 +148,10 @@ check :
 instructions : Makefile
 	@sed -n 's/^#@//p' $<
 
+.PHONY : clean
+clean :
+	@rm *.prmtop *.inpcrd *.out leap.log 
+	@rm -r $(RUNdir)/
 #@
 #@
 #@ TO USE for AMBER Thermodynamic Integration::
