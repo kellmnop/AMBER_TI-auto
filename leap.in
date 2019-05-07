@@ -44,6 +44,26 @@ solvatebox combo_protein SPCBOX 10.0 iso
 addIonsRand combo_protein Na+ $Na1 Cl- $Cl1
 saveAmberParm combo_protein PRMTOPwat_protein.prmtop INPCRDwat_protein.inpcrd
 savepdb combo_protein PDBfiles/protein_hydrated.pdb
+quit
+_EOF
+
+
+tleap -f - <<_EOF
+source leaprc.protein.ff14SB
+source leaprc.water.spce
+loadoff MAA.lib
+
+TCR = loadpdb $TCR
+$(echo "$TCRbondlist" | sed "s/%cond%/TCR/g")
+savepdb TCR PDBfiles/init_WT-protein.pdb
+
+mut = loadpdb $MUT
+$(echo "$TCRbondlist" | sed "s/%cond%/mut/g" )
+savepdb mut PDBfiles/init_$MUTname-protein.pdb
+
+MHC = loadpdb $MHC
+$(echo "$MHCbondlist" | sed "s/%cond%/MHC/g" )
+savepdb MHC PDBfiles/init_MHC.pdb
 
 combo_complex = combine {TCR mut MHC}
 savepdb combo_complex PDBfiles/combo-TCR_pMHC.pdb
