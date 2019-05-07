@@ -11,7 +11,7 @@ DNA: 100ps NPT MD gradually releasing restraints on solute
   nstlim = 20000, dt = %DT%,
   ntpr = 1000, ntwx = 1000, ntwr = 10000,
   restraint_wt = 0.5,
-  restraintmask = !(:WAT,Na+,Cl-),
+  restraintmask = '!(:WAT,Na+,Cl-)',
   ntwprt = %R%,
   icfe = 1, ifsc = 1, clambda = %L%,
   timask1=%TS1%
