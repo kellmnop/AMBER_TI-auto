@@ -24,10 +24,10 @@ NVT dt=1.0fs with SHAKE, production at 300K for with Berendsen thermostat (20ns 
   iwrap  = 1,           !Wrap
   ntwprt = %R%,         !Only write MDCRD coords for first %R% atoms. 35910 for protein, 161077 for complex
   icfe = 1, ifsc = 1, clambda = %L%,
-  timask1=%TS1%,
-  timask2=%TS2%,
-  scmask1=%TS1%,
-  scmask2=%TS2%,
+  timask1=%TS1%
+  timask2=%TS2%
+  scmask1=%TS1%
+  scmask2=%TS2%
   ifmbar = 1, mbar_states = %MBS%,
   mbar_lambda = %WIN%,
 /
