@@ -1,6 +1,6 @@
 DNA: 50ps NPT MD no restraints
  &cntrl
-  imin = 0, irest = 1, ntx = 7,
+  imin = 0, irest = 1, ntx = 5,
   ntb = 2, ntxo = 1,
   ntt = 3, gamma_ln = 1.0,
   tempi = 300.0, temp0  = 300.0,
@@ -10,8 +10,7 @@ DNA: 50ps NPT MD no restraints
   ntr = 0,
   iwrap = 1,
   nstlim = 50000, dt = %DT%,
-  ntpr = 1000, ntwx = 5000, ntwr = 10000,
-  ntwprt = %R%,
+  ntpr = 1000, ntwx = 500, ntwr = 10000,
   icfe = 1, ifsc = 1, clambda = %L%,
   timask1=%TS1%
   timask2=%TS2%
