@@ -4,16 +4,26 @@
 #$ -q gpu
 #$ -l gpu=2
 
-module purge
-# Increase the MPI buffer
-export P4_GLOBMEMSIZE=268435456
-
 # export CUDA_VISIBLE_DEVICES="0,1"
-export MV2_ENABLE_AFFINITY=0
 
 module load amber/18.0
 
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.MPI -O \
+				  -i md0_min1.in \
+				  -o md0_min1.out \
+				  -r md0_min1.rst \
+				  -p TI-merged_WAT.prmtop \
+				  -c TI-merged_WAT.inpcrd \
+				  -ref TI-merged_WAT.inpcrd
+				  
+mpirun -np $NSLOTS pmemd.MPI -O \
+				  -i md0_min2.in \
+				  -o md0_min2.out \
+				  -r md0_min2.rst \
+				  -p TI-merged_WAT.prmtop \
+				  -c md0_min1.rst
+
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md1_heat.in    \
 				  -o md1_heat.out          \
 				  -c md0_min2.rst              \
@@ -22,7 +32,7 @@ mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
 				  -x md1_heat.mdcrd		\
 				  -ref md0_min2.rst
 
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md2a_eqNPT_restrained.in    \
 				  -o md2a_eqNPT_restrained.out          \
 				  -c md1_heat.rst              \
@@ -31,7 +41,7 @@ mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
 				  -x md2a_eqNPT_restrained.mdcrd	\
 				  -ref md1_heat.rst
 				  
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md2b_eqNPT_restrained.in    \
 				  -o md2b_eqNPT_restrained.out          \
 				  -c md2a_eqNPT_restrained.rst              \
@@ -40,7 +50,7 @@ mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
 				  -x md2b_eqNPT_restrained.mdcrd		\
 				  -ref md2a_eqNPT_restrained.rst
 				  
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md2c_eqNPT_restrained.in    \
 				  -o md2c_eqNPT_restrained.out          \
 				  -c md2b_eqNPT_restrained.rst              \
@@ -49,7 +59,7 @@ mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
 				  -x md2c_eqNPT_restrained.mdcrd		\
 				  -ref md2b_eqNPT_restrained.rst
 				  
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md2d_eqNPT_restrained.in    \
 				  -o md2d_eqNPT_restrained.out          \
 				  -c md2c_eqNPT_restrained.rst              \
@@ -58,7 +68,7 @@ mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
 				  -x md2d_eqNPT_restrained.mdcrd		\
 				  -ref md2c_eqNPT_restrained.rst
 				  
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md2e_eqNPT_restrained.in    \
 				  -o md2e_eqNPT_restrained.out          \
 				  -c md2d_eqNPT_restrained.rst              \
@@ -67,7 +77,7 @@ mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
 				  -x md2e_eqNPT_restrained.mdcrd	\
 				  -ref md2d_eqNPT_restrained.rst
 
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md3_eqNPT.in    \
 				  -o md3_eqNPT.out          \
 				  -c md2e_eqNPT_restrained.rst              \
@@ -77,7 +87,7 @@ mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
 
 bash equalize_volume.sh
 
-mpirun --bind-to none -np $NSLOTS pmemd.cuda.MPI -O \
+mpirun -np $NSLOTS pmemd.cuda.MPI -O \
 				  -i md4_eqNVT.in    \
 				  -o md4_eqNVT.out          \
 				  -c md3_eqNPT-eq.rst              \

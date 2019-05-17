@@ -37,20 +37,6 @@ for window in $windows; do
 	ln -sf "$top/PRMTOPwat_$type-merged.prmtop" ./TI-merged_WAT.prmtop
 	ln -sf "$top/equalize_volume.sh" ./equalize_volume.sh
 	ln -sf "$top/RCA.sh" ./RCA.sh
-	qsub <<-_EOF
-			#!/bin/bash
-			#$ -N $N-$window
-			#$ -pe smp 8-32
-			#$ -M gkeller1@nd.edu
-			#$ -m ae
-			#$ -q long
-			source /afs/crc.nd.edu/x86_64_linux/Modules/current/init/bash
-			# Increase the MPI buffer
-			export P4_GLOBMEMSIZE=268435456
-			module load amber/18.0
-			mpirun -np \$NSLOTS pmemd.MPI -O -i md0_min1.in -o md0_min1.out -r md0_min1.rst -p TI-merged_WAT.prmtop -c TI-merged_WAT.inpcrd -ref TI-merged_WAT.inpcrd
-			mpirun -np \$NSLOTS pmemd.MPI -O -i md0_min2.in -o md0_min2.out -r md0_min2.rst -p TI-merged_WAT.prmtop -c md0_min1.rst
-			_EOF
-
+	qsub prep.job
 	cd $run/$type
 done
